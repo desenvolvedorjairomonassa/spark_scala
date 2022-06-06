@@ -1,0 +1,22 @@
+
+spark shell
+  scala>
+	val jurosDF = spark.read.json("juros_selic.json")
+	jurosDF.printSchema
+	#mostrar os 5 registros
+	jurosDF.show(5)
+	# não trunca a impressão
+	jurosDF.show(5,false)
+	jurosDF.count()
+	val jurosDF_10 = jurosDF.where(" valor > 10")
+	jurosDF_10.show(10)
+	jurosDF_10.write.saveAsTable("JUROS_MAIOR10")
+	# Salvar no hive
+	val jurosDF10HIVE = spark.read.table("JUROS_MAIOR10")
+	jurosDF10HIVE.show(10)
+	jurosDF10HIVE.printSchema
+	# salvar no HDFS
+	jurosDF.write.save("/bi/warehouse/save_juros")
+	# lendo um arquivo parquet
+	val jurosHDFS = spark.read.load("hdfs://namenode:8020/bi/warehouse/save_juros")
+	jurosHDFS.printSchema
